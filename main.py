@@ -33,6 +33,6 @@ def get_user_media(message):
 def website(message):
     markup = types.InlineKeyboardMarkup()
     markup.add(types.InlineKeyboardButton("Веб-Сайт", url="https://www.google.by/"))
-    bot_prikol.send_message(message.chat.id,'Ознакомьтесь с Веб-Сайтом', reply_markup=markup)
+    bot_prikol.send_message(message.chat.id, 'Ознакомьтесь с Веб-Сайтом', reply_markup=markup)
 
 bot_prikol.polling(none_stop=True)
