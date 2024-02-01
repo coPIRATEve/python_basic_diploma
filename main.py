@@ -9,7 +9,7 @@ def start(message):
         mess = f'Привет, <b>{message.from_user.first_name} {message.from_user.last_name}</b>, ты можешь ' \
                f'написать мне <u>"пошути"</u> и я попробую тебя рассмешить'
     else:
-        mess = f'Привет, <b>{message.from_user.first_name}</b>, ты можешь ' \
+        mess = f'Привет,<b>{message.from_user.first_name}</b>, ты можешь ' \
                f'написать мне <u>"пошути"</u> и я попробую тебя рассмешить'
     bot_prikol.send_message(message.chat.id, mess, parse_mode='html')
 
@@ -32,7 +32,7 @@ def get_user_media(message):
 @bot_prikol.message_handler(commands=['web'])
 def website(message):
     markup = types.InlineKeyboardMarkup()
-    markup.add(types.InlineKeyboardButton("Веб-Сайт", url="https://www.google.by/"))
+    markup.add(types.InlineKeyboardButton('Веб-Сайт', url='https://www.google.by/'))
     bot_prikol.send_message(message.chat.id, 'Ознакомьтесь с Веб-Сайтом', reply_markup=markup)
 
 bot_prikol.polling(none_stop=True)
