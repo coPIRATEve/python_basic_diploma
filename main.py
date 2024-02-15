@@ -1,7 +1,12 @@
+import logging
 import telebot
 from telebot import types
+from settings import SiteSettings
 
-bot_prikol = telebot.TeleBot('6572271155:AAF6KPPIyH6o-MUfWYam8ESJEpowEaBw6dY')
+# Загрузка настроек из файла .env
+settings = SiteSettings()
+
+bot_prikol = telebot.TeleBot(settings.tg_api.get_secret_value())
 
 @bot_prikol.message_handler(commands=['start'])
 def start(message):
@@ -13,26 +18,36 @@ def start(message):
                f'написать мне <u>"пошути"</u> и я попробую тебя рассмешить'
     bot_prikol.send_message(message.chat.id, mess, parse_mode='html')
 
-@bot_prikol.message_handler(content_types=['text'])
-def get_user_text(message):
-    if message.text.lower() == "пошути":
-        bot_prikol.send_message(message.chat.id, 'Я хотел сказать что-то смешное, но лучше посмотри в зеркало',
-                                parse_mode='html')
-    elif message.text.lower() == "id":
-        bot_prikol.send_message(message.chat.id, f"Ну всё, приколист, я вычислил твой ID: {message.from_user.id}",
-                                parse_mode='html')
-    else:
-        bot_prikol.send_message(message.chat.id, 'Такому клоуну, как ты, даже шутить не надо', parse_mode='html')
+@bot_prikol.message_handler(commands=['main_menu'])
+#главное меню
+def main_menu(message):
+    key = types.InlineKeyboardMarkup()
+    key.add(types.InlineKeyboardButton(text='Кинопоиск', callback_data="go_to_website"))
+    key.add(types.InlineKeyboardButton(text='help', callback_data="get_help"))
+    mess = bot_prikol.send_message(message.chat.id, 'Нажми кнопку', reply_markup=key)
+    logging.info((message.chat.id, mess))
 
-@bot_prikol.message_handler(content_types=['sticker', 'photo'])
-def get_user_media(message):
-    bot_prikol.send_message(message.chat.id, "<b>Вау</b>, у тебя, должно быть, нет друзей, если ты делишься таким с ботом",
-                            parse_mode='html')
+@bot_prikol.message_handler(commands=["help"])
+def help(message, res=False):
+   markup = types.InlineKeyboardMarkup()
+   button1 = types.InlineKeyboardButton(text='Отмена', callback_data='cancel')
+   markup.add(button1)
+   mess = bot_prikol.send_message(message.chat.id, 'Задайте вопрос боту.', reply_markup=markup)
+   bot_prikol.register_next_step_handler(mess, message.chat.id)
 
 @bot_prikol.message_handler(commands=['web'])
 def website(message):
     markup = types.InlineKeyboardMarkup()
-    markup.add(types.InlineKeyboardButton("Веб-Сайт", url="https://www.google.by/"))
-    bot_prikol.send_message(message.chat.id, 'Ознакомьтесь с Веб-Сайтом', reply_markup=markup)
+    markup.add(types.InlineKeyboardButton("Кинопоиск", url="https://www.kinopoisk.ru/?utm_referrer=yandex.by"))
+    bot_prikol.send_message(message.chat.id, 'Лучшие фильмы здесь!', reply_markup=markup)
+
+@bot_prikol.callback_query_handler(func=lambda call: call.data == "go_to_website")
+def callback_go_to_website(call):
+    website(call.message)
+
+@bot_prikol.callback_query_handler(func=lambda call: call.data == "get_help")
+def callback_get_help(call):
+    help(call.message)
 
 bot_prikol.polling(none_stop=True)
+
