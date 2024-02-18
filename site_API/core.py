@@ -1,4 +1,4 @@
-from settings import SiteSettings
+from venv.settings import SiteSettings
 from site_API.utils.site_api_handler import SiteApiInterface
 
 site = SiteSettings()

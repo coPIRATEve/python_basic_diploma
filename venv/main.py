@@ -1,7 +1,7 @@
 import logging
 import telebot
 from telebot import types
-from settings import SiteSettings
+from venv.settings import SiteSettings
 
 # Загрузка настроек из файла .env
 settings = SiteSettings()
