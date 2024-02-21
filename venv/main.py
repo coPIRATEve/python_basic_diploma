@@ -11,11 +11,9 @@ bot_prikol = telebot.TeleBot(settings.tg_api.get_secret_value())
 @bot_prikol.message_handler(commands=['start'])
 def start(message):
     if message.from_user.last_name:
-        mess = f'Привет, <b>{message.from_user.first_name} {message.from_user.last_name}</b>, ты можешь ' \
-               f'написать мне <u>"пошути"</u> и я попробую тебя рассмешить'
+        mess = f'Привет, <b>{message.from_user.first_name} {message.from_user.last_name}</b>, я бот-киноман '
     else:
-        mess = f'Привет, <b>{message.from_user.first_name}</b>, ты можешь ' \
-               f'написать мне <u>"пошути"</u> и я попробую тебя рассмешить'
+        mess = f'Привет, <b>{message.from_user.first_name}</b>, я бот-киноман '
     bot_prikol.send_message(message.chat.id, mess, parse_mode='html')
 
 @bot_prikol.message_handler(commands=['main_menu'])
