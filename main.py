@@ -2,15 +2,15 @@ import telebot
 from config_data import config
 from telebot.storage import StateMemoryStorage
 from comands_settings import start, help_command, website, menu,history_handler, min_temp, max_temp, get_weather, get_coord
-from database.utils.outbase import outbaseInterface
+from database.utils.outbase import OutbaseInterface
+from database.common.models import History
+
 storage = StateMemoryStorage()
 
 bot_prikol = telebot.TeleBot(token=config.BOT_TOKEN, state_storage=storage)
 api = config.API_KEY
 
 bot_prikol = telebot.TeleBot(token=config.BOT_TOKEN)
-
-outbase = outbaseInterface()
 
 @bot_prikol.message_handler(commands=['history'])
 def history_command_handler(message):
@@ -49,5 +49,11 @@ def weather_handler(message):
 def coords_handler(message):
     get_coord(bot_prikol, message, api)
 
+if __name__ == "__main__":
+    data = {'number': '1', 'message': 'Example message'}
+    outbase = OutbaseInterface()
+    outbase.create(data)
 
-bot_prikol.polling(none_stop=True)
+    response = outbase.retrieve()(History)
+    for entry in response:
+        print(entry.number, entry.message)
