@@ -10,4 +10,5 @@ class ModelBase(pw.Model):
 
 class History(ModelBase):
     number = pw.TextField()
-    message = pw.TextField()
+    message = pw.TextField()  # TODO зачем сообщение? Достаточно сохранить только "команду"
+    # TODO не хватает поля для id пользователя

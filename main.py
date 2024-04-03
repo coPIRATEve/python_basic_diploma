@@ -10,9 +10,9 @@ storage = StateMemoryStorage()
 bot_prikol = telebot.TeleBot(token=config.BOT_TOKEN, state_storage=storage)
 api = config.API_KEY
 
-bot_prikol = telebot.TeleBot(token=config.BOT_TOKEN)
-
-@bot_prikol.message_handler(commands=['history'])
+bot_prikol = telebot.TeleBot(token=config.BOT_TOKEN)  # TODO двумя строками выше данный объект уже создаётся, оставьте только один вариант
+# TODO разместите все хэндлеры в отдельном модуле handlers.py
+@bot_prikol.message_handler(commands=['history'])  # TODO Определение функции должно отделяться от остального кода двумя пустыми строками
 def history_command_handler(message):
     history_handler(bot_prikol, outbase, message)
 

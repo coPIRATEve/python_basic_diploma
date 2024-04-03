@@ -9,7 +9,7 @@ def _store_data(db: db,
                 model: T,
                 *data: List[Dict]) -> None:
     with db.atomic():
-        model.insert_many(data).execute()
+        model.insert_many(data).execute()  # TODO Определение функции должно отделяться от остального кода двумя пустыми строками
 
 def _retrieve_all_data(db: db,
                        model: T,
@@ -18,7 +18,9 @@ def _retrieve_all_data(db: db,
         response = model.select(*columns)
     return response
 
-class OutbaseInterface():
+
+class OutbaseInterface():  # TODO если у класс нет предков то и скобки не нужны
+
     @staticmethod
     def create(data):
         return _store_data(db, History, data)
