@@ -1,1 +1,1 @@
-from .default import start, help_command, website, menu, history_handler
+from .default import start, help_command, website, menu

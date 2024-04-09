@@ -1,0 +1,4 @@
+peewee==3.14.4
+Telebot (python-telegram-bot)== 13.7
+Types (typing)
+Datetime (datetime
