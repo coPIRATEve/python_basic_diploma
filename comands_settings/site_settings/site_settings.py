@@ -97,7 +97,7 @@ def get_coord(bot_prikol, message, api):
         message: Объект сообщения от пользователя.
         api: Ключ API для доступа к сервису погоды.
     """
-    bot_prikol.reply_to(message, "Введите название города:")
+    bot_prikol.reply_to(message, "Введите название Города:")
     bot_prikol.register_next_step_handler(message, process_coords)
 
 def process_coords(message, bot_prikol, api):
