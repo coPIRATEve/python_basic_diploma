@@ -1,6 +1,7 @@
 import telebot
 from telebot import types
 from config_data import config
+import datetime as dt
 
 bot_prikol = telebot.TeleBot(token=config.BOT_TOKEN)
 
@@ -53,13 +54,35 @@ def menu(message):
     markup.add(low_button, high_button, coords_button, weather_button)
     bot_prikol.reply_to(message, "Выберите действие:", reply_markup=markup)
 
-def bot_echo(message):
+def history(update, context):
     """
-    Обработчик текстовых сообщений, отправляет эхо-сообщение.
+    Обработчик команды /history. Отправляет историю сообщений.
+
+    Args:
+        update: Обновление Telegram.
+        context: Контекст обратного вызова.
+    """
+    chat_id = update.message.chat_id
+    with open("history.txt", 'r') as file:
+        history_content = file.read()
+        context.bot.send_message(chat_id=chat_id, text=history_content)
+
+def send_history(message):
+    """
+    Обработчик текстовых сообщений, сохраняет историю сообщений.
 
     Args:
         message: Объект сообщения от пользователя.
     """
-    bot_prikol.reply_to(
-        message, "Эхо без состояния или фильтра.\n" f"Сообщение: {message.text}"
-    )
+    if message.text != 'cron':
+        with open("history.txt", "a", encoding='utf-8') as file:
+            file.write(str(dt.datetime.now().date()) + '\t')
+            file.write(str(dt.datetime.now().time())[:8] + '\t')
+            file.write("текст\t")
+            if message.from_user.first_name:
+                file.write(message.from_user.first_name)
+            if message.from_user.last_name:
+                file.write(' ' + message.from_user.last_name)
+            file.write('\t')
+            file.write(str(message.from_user.id) + '\t')
+            file.write(message.text + '\n')

@@ -1,17 +1,19 @@
 import requests
 import json
+from config_data import config
 
-def min_temp(bot_prikol, message, api):
+api = config.API_KEY
+
+def min_temp(bot_prikol, message):
     """
     Обработчик команды /low. Выводит минимальную температуру для указанного города.
 
     Args:
         bot_prikol: Объект бота TeleBot.
         message: Объект сообщения от пользователя.
-        api: Ключ API для доступа к сервису погоды.
     """
     bot_prikol.reply_to(message, "Введите название города:")
-    bot_prikol.register_next_step_handler(message, process_min_temp)
+    bot_prikol.register_next_step_handler(message, lambda msg: process_min_temp(msg, bot_prikol, api))
 
 def process_min_temp(message, bot_prikol, api):
     """
@@ -30,17 +32,16 @@ def process_min_temp(message, bot_prikol, api):
     else:
         bot_prikol.reply_to(message, f'Город указан неверно.')
 
-def max_temp(bot_prikol, message, api):
+def max_temp(bot_prikol, message):
     """
     Обработчик команды /high. Выводит максимальную температуру для указанного города.
 
     Args:
         bot_prikol: Объект бота TeleBot.
         message: Объект сообщения от пользователя.
-        api: Ключ API для доступа к сервису погоды.
     """
     bot_prikol.reply_to(message, "Введите название города:")
-    bot_prikol.register_next_step_handler(message, process_max_temp)
+    bot_prikol.register_next_step_handler(message, lambda msg: process_max_temp(msg, bot_prikol, api))
 
 def process_max_temp(message, bot_prikol, api):
     """
@@ -59,17 +60,16 @@ def process_max_temp(message, bot_prikol, api):
     else:
         bot_prikol.reply_to(message, f'Город указан неверно.')
 
-def get_weather(bot_prikol, message, api):
+def get_weather(bot_prikol, message):
     """
     Обработчик команды /weather. Выводит текущую температуру для указанного города.
 
     Args:
         bot_prikol: Объект бота TeleBot.
         message: Объект сообщения от пользователя.
-        api: Ключ API для доступа к сервису погоды.
     """
     bot_prikol.reply_to(message, "Введите название города:")
-    bot_prikol.register_next_step_handler(message, process_weather)
+    bot_prikol.register_next_step_handler(message, lambda msg: process_weather(msg, bot_prikol, api))
 
 def process_weather(message, bot_prikol, api):
     """
@@ -88,17 +88,16 @@ def process_weather(message, bot_prikol, api):
     else:
         bot_prikol.reply_to(message, f'Город указан неверно.')
 
-def get_coord(bot_prikol, message, api):
+def get_coord(bot_prikol, message):
     """
     Обработчик команды /coords. Выводит координаты указанного города.
 
     Args:
         bot_prikol: Объект бота TeleBot.
         message: Объект сообщения от пользователя.
-        api: Ключ API для доступа к сервису погоды.
     """
-    bot_prikol.reply_to(message, "Введите название Города:")
-    bot_prikol.register_next_step_handler(message, process_coords)
+    bot_prikol.reply_to(message, "Введите название города:")
+    bot_prikol.register_next_step_handler(message, lambda msg: process_coords(msg, bot_prikol, api))
 
 def process_coords(message, bot_prikol, api):
     """
