@@ -48,8 +48,3 @@ def history_handler(message):
 @bot_prikol.message_handler(content_types=['text'])
 def handle_text(message):
     record_message_history(message)
-
-
-# Запуск бота
-if __name__ == "__main__":
-    bot_prikol.polling()
