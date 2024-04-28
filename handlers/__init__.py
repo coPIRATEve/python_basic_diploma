@@ -1,1 +1,1 @@
-from handlers import command_handlers
+from .command_handlers import *

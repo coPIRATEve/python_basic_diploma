@@ -14,6 +14,7 @@ def start(message):
     Args:
         message: Объект сообщения от пользователя.
     """
+
     greeting = f'Привет, <b>{message.from_user.first_name}</b>! Я бот-синоптик. Воспользуйся кнопками ниже, чтобы получить информацию о погоде или другие сервисы.'
     if message.from_user.last_name:
         greeting = f'Привет, <b>{message.from_user.first_name} {message.from_user.last_name}</b>! Я бот-синоптик. Воспользуйся кнопками ниже, чтобы получить информацию о погоде или другие сервисы.'
@@ -25,8 +26,10 @@ def start(message):
     help_button = types.KeyboardButton('/help')
     history_button = types.KeyboardButton('/history')
     menu_button = types.KeyboardButton('/menu')
+    website_button = types.KeyboardButton('/web')
 
-    markup.add(start_button, help_button, history_button, menu_button)
+
+    markup.add(start_button, help_button, history_button, menu_button, website_button)
     bot_prikol.send_message(message.chat.id, greeting, parse_mode='html', reply_markup=markup)
 
 
@@ -37,14 +40,18 @@ def help_command(message):
     Args:
         message: Объект сообщения от пользователя.
     """
+
     markup = types.InlineKeyboardMarkup()
     bot_prikol.send_message(message.chat.id, 'Этот бот создан для получения фактов о погоде.\n'
                                              'используйте комманду /menu для того чтобы узнать факты о погоде в вашем'
                                              ' городе\n'
                                              'используйте комманду /history для того чтобы увидеть историю ваших '
-                                             'последних 10-ти сообщений', reply_markup=markup)
+                                             'последних 10-ти сообщений\n'
+                                             'используйте команду /web и сможете перейти на сайт погоды'
+                                             '', reply_markup=markup)
 
 def website(message):
+
     """
     Обработчик команды /web. Отправляет ссылку на погодный сайт.
 
@@ -61,7 +68,8 @@ def menu(message):
 
     Args:
         message: Объект сообщения от пользователя.
-    """
+    record_message_history(message)"""
+
     markup = telebot.types.ReplyKeyboardMarkup(row_width=2)
     low_button = telebot.types.KeyboardButton('/low')
     high_button = telebot.types.KeyboardButton('/high')
@@ -92,23 +100,26 @@ def send_history(message):
     bot_prikol.send_message(chat_id, history_content)
 
 
-
 def record_message_history(message):
     """
-     Обработчик текстовых сообщений, сохраняет историю сообщений.
+    Обработчик текстовых сообщений, сохраняет историю сообщений.
 
-     Args:
-         message: Объект сообщения от пользователя.
-     """
-    if message.text != 'cron':
-        with open(HISTORY, "a", encoding='utf-8') as file:
-            file.write(str(dt.datetime.now().date()) + '\t')
-            file.write(str(dt.datetime.now().time())[:8] + '\t')
-            file.write("текст\t")
-            if message.from_user.first_name:
-                file.write(message.from_user.first_name)
-            if message.from_user.last_name:
-                file.write(' ' + message.from_user.last_name)
-            file.write('\t')
-            file.write(str(message.from_user.id) + '\t')
-            file.write(message.text + '\n')
+    Args:
+        message: Объект сообщения от пользователя.
+    """
+    # Открываем файл для добавления новой записи
+    with open(HISTORY, "a", encoding='utf-8') as file:
+        # Формируем запись с текущей датой и временем
+        file.write(str(dt.datetime.now().date()) + '\t')
+        file.write(str(dt.datetime.now().time())[:8] + '\t')  # Записываем время без секунд
+        file.write("текст\t")  # Метка для указания, что записываемый текст - это текст сообщения
+        # Добавляем имя и, если имеется, фамилию пользователя
+        if message.from_user.first_name:
+            file.write(message.from_user.first_name)
+        if message.from_user.last_name:
+            file.write(' ' + message.from_user.last_name)
+        file.write('\t')
+        # Записываем ID пользователя
+        file.write(str(message.from_user.id) + '\t')
+        # Записываем текст сообщения
+        file.write(message.text + '\n')
